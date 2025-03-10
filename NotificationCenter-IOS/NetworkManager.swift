@@ -1,6 +1,6 @@
 import Foundation
 
-class NetworkManager{
+class NetworkManager: ObservableObject{
     @Published var books: [BookModel] = []
     
     func addTitle(title: String, count: Int){

@@ -2,21 +2,29 @@ import SwiftUI
 
 struct BookDetailView: View {
     @State private var titleInput: String = ""
-    
+    @State private var countInput: String = "1" // Default count set to 1
+    @ObservedObject var networkManager: NetworkManager
+
     var body: some View {
-        VStack {
+     
             HStack {
-                Text("Title")
+                Text("Title:")
                 TextField("Insert title", text: $titleInput)
                     .textFieldStyle(.roundedBorder)
+                    .padding()
             }
-            .padding()
+
             
             HStack {
                 Spacer()
                 Button(action: {
-                    // Add action for save button here
-                    print("Title saved: \(titleInput)")
+                    // Convert countInput to an integer and add book
+                    if let count = Int(countInput), !titleInput.isEmpty {
+                        networkManager.addTitle(title: titleInput, count: count)
+                        // After adding, reset the inputs
+                        titleInput = ""
+                        countInput = "1"
+                    }
                 }, label: {
                     Text("Save")
                         .padding()
@@ -26,11 +34,10 @@ struct BookDetailView: View {
                 })
             }
             .padding()
-        }
-        .padding()
+            .navigationTitle("Add Book")
+        
     }
 }
-
 #Preview {
-    BookDetailView()
+    BookDetailView(networkManager: NetworkManager())
 }
